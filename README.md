@@ -31,3 +31,9 @@ python -m venv .venv
 pip install -r requirements.txt
 python -m behave
 ```
+
+To try the check yourself:
+
+```bash
+python main.py
+```
