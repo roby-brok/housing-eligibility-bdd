@@ -11,16 +11,30 @@ MIN_YEARS_IN_BOROUGH = 2
 INCOME_LIMIT = 60000  # household income must be less than this
 
 
+class InputError(ValueError):
+    """A value the resident typed cannot be used for the check."""
+
+
 @dataclass
 class Decision:
     eligible: bool
     reasons: list = field(default_factory=list)
 
 
+def _whole_number(text, error_message):
+    """Turn typed text into a whole number, or stop with a clear message."""
+    text = str(text).strip()
+    if not (text.isascii() and text.isdigit()):
+        raise InputError(error_message)
+    return int(text)
+
+
 def check_eligibility(age, years_in_borough, income):
-    age = int(age)
-    years_in_borough = int(years_in_borough)
-    income = int(income)
+    age = _whole_number(age, "Age must be a whole number, for example 34.")
+    years_in_borough = _whole_number(
+        years_in_borough, "Years in the borough must be a whole number, for example 3.")
+    income = _whole_number(
+        income, "Income must be a whole number of pounds, for example 24000.")
 
     reasons = []
     if age < MIN_AGE:
