@@ -29,10 +29,16 @@ Feature: Housing register eligibility check
       | 34  | 1     | 24000  | lived in the borough for at least 2 years  |
       | 34  | 5     | 60000  | less than 60000 pounds a year              |
 
-  Scenario: Resident types their age in words
-    Given a resident is thirty years old
-    And they have lived in the borough for 5 years
-    And their household income is 24000 pounds a year
+  Scenario Outline: Resident enters a value the check cannot use
+    Given a resident is <age> years old
+    And they have lived in the borough for <years> years
+    And their household income is <income> pounds a year
     When they check their eligibility
-    Then they should see the error "Age must be a whole number, for example 34."
+    Then they should see the error "<error>"
     And no eligibility decision should be made
+
+    Examples: Invalid or impossible values
+      | age    | years | income | error                                                       |
+      | thirty | 5     | 24000  | Age must be a whole number, for example 34.                 |
+      | 34     | 5     | -500   | Income must be a whole number of pounds, for example 24000. |
+      | 34     | 40    | 24000  | Years in the borough cannot be more than your age.          |
