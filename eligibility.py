@@ -35,6 +35,8 @@ def check_eligibility(age, years_in_borough, income):
         years_in_borough, "Years in the borough must be a whole number, for example 3.")
     income = _whole_number(
         income, "Income must be a whole number of pounds, for example 24000.")
+    if years_in_borough > age:
+        raise InputError("Years in the borough cannot be more than your age.")
 
     reasons = []
     if age < MIN_AGE:
